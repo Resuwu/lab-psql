@@ -208,7 +208,7 @@ public class Clr implements CommandLineRunner {
 
         while (iterator.hasNext()) {
             System.out.println(counter++ + ": " + iterator.next().toString());
-            if (counter % SEARCH_COUNT == 0) {
+            if (isSearchCountReached(counter)) {
                 while (true) {
                     input = bufferedReader.readLine();
 
@@ -241,5 +241,9 @@ public class Clr implements CommandLineRunner {
                 System.out.println("Invalid input. Please enter a valid index, or 'exit' to abort.");
             }
         }
+    }
+
+    private boolean isSearchCountReached(short counter) {
+        return counter % SEARCH_COUNT == 0;
     }
 }
