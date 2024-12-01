@@ -223,6 +223,8 @@ public class Clr implements CommandLineRunner {
                         return entities.get(index);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid input. Please enter a valid index, 'more' to search further or 'exit' to abort.");
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Index out of range! Please enter a valid index.");
                     }
                 }
             }
@@ -239,6 +241,8 @@ public class Clr implements CommandLineRunner {
                 return entities.get(index);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid index, or 'exit' to abort.");
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Index out of range! Please enter a valid index.");
             }
         }
     }
