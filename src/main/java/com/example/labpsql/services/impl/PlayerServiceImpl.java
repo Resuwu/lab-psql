@@ -6,7 +6,6 @@ import com.example.labpsql.models.Player;
 import com.example.labpsql.repositories.PlayerRepository;
 import com.example.labpsql.services.PlayerService;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player savePlayer(AddPlayerRequest request) {
-        if (!validationUtil.isValid(request)) {
+        if (validationUtil.isNotValid(request)) {
             validationUtil
                     .violations(request)
                     .stream()

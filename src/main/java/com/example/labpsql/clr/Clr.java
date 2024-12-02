@@ -3,6 +3,7 @@ package com.example.labpsql.clr;
 import com.example.labpsql.dto.request.*;
 import com.example.labpsql.models.*;
 import com.example.labpsql.services.*;
+import com.example.labpsql.utils.ObjectTypes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.example.labpsql.utils.ConsoleMessages.*;
-import static java.lang.System.exit;
+import static com.example.labpsql.utils.ObjectTypes.*;
+import static com.example.labpsql.utils.SearchNavigation.EXIT;
+import static com.example.labpsql.utils.SearchNavigation.MORE;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class Clr implements CommandLineRunner {
     private final SubjectService subjectService;
     private final TeamCompositionService teamCompositionService;
     private final TeamService teamService;
+
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private static final short SEARCH_COUNT = 20;
 
@@ -48,13 +52,13 @@ public class Clr implements CommandLineRunner {
                     case "4" -> insertTeam();
                     case "5" -> insertTeamComposition();
                     case "6" -> insertResult();
-                    case "7" -> displayTable(countryService.getAllCountries(), "Countries:");
-                    case "8" -> displayTable(playerService.getAllPlayers(), "Players:");
-                    case "9" -> displayTable(resultService.getAllResults(), "Results:");
+                    case "7" -> displayTable(countryService.getAllCountries(), getPrintHeaderMessage(COUNTRY));
+                    case "8" -> displayTable(playerService.getAllPlayers(), getPrintHeaderMessage(PLAYER));
+                    case "9" -> displayTable(resultService.getAllResults(), getPrintHeaderMessage(RECORD));
                     case "10" -> displayResultsByYear();
-                    case "11" -> displayTable(subjectService.getAllSubjects(), "Subjects:");
-                    case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), "Team Compositions:");
-                    case "13" -> displayTable(teamService.getAllTeams(), "Teams:");
+                    case "11" -> displayTable(subjectService.getAllSubjects(), getPrintHeaderMessage(SUBJECT));
+                    case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), getPrintHeaderMessage(TEAM_COMPOSITION));
+                    case "13" -> displayTable(teamService.getAllTeams(), getPrintHeaderMessage(TEAM));
                     case "14" -> exitApplication();
                     default -> System.out.println(INVALID_OPTION);
                 }
@@ -64,7 +68,7 @@ public class Clr implements CommandLineRunner {
                 System.out.println("An error occurred: " + re.getMessage());
             }
 
-            System.out.print("\nPress ENTER to continue...");
+            System.out.print(WAITING_FOR_ENTER);
             bufferedReader.readLine();
         }
     }
@@ -74,7 +78,7 @@ public class Clr implements CommandLineRunner {
         String countryName = this.bufferedReader.readLine();
 
         Country createdCountry = countryService.saveCountry(countryName);
-        printResult(createdCountry, "Country");
+        printResult(createdCountry, COUNTRY.name);
     }
 
     private void insertSubject() throws IOException {
@@ -86,28 +90,28 @@ public class Clr implements CommandLineRunner {
         builder.sport(this.bufferedReader.readLine());
 
         Subject createdSubject = subjectService.saveSubject(builder.build());
-        printResult(createdSubject, "Subject");
+        printResult(createdSubject, SUBJECT.name);
     }
 
     private void insertPlayer() throws IOException {
         AddPlayerRequest.AddPlayerRequestBuilder builder = AddPlayerRequest.builder();
-        System.out.println("Insert a new player name:");
+        System.out.println("Enter a new player name:");
         builder.name(this.bufferedReader.readLine());
 
-        System.out.println("Insert a new player country:");
+        System.out.println("Enter a new player country:");
         builder.country(countryService.findByName(this.bufferedReader.readLine()));
 
-        System.out.println("Insert a new player gender (male/female/other):");
+        System.out.println("Enter a new player gender (male/female/other):");
         builder.gender(Gender.valueOf(this.bufferedReader.readLine().toUpperCase()));
 
-        System.out.println("Insert a new player date of birth (YYYY-MM-DD):");
+        System.out.println("Enter a new player date of birth (YYYY-MM-DD):");
         builder.birthDate(LocalDate.parse(this.bufferedReader.readLine()));
 
-        System.out.println("Insert new player's subject:");
+        System.out.println("Enter new player's subject:");
         builder.subject(search(subjectService.getAllSubjects()));
 
         Player createdPlayer = playerService.savePlayer(builder.build());
-        printResult(createdPlayer, "Player");
+        printResult(createdPlayer, PLAYER.name);
     }
 
     private void insertTeam() throws IOException {
@@ -131,7 +135,7 @@ public class Clr implements CommandLineRunner {
         builder.managerName(this.bufferedReader.readLine());
 
         Team createdTeam = teamService.saveTeam(builder.build());
-        printResult(createdTeam, "Team");
+        printResult(createdTeam, TEAM.name);
     }
 
     private void insertTeamComposition() throws IOException {
@@ -149,7 +153,7 @@ public class Clr implements CommandLineRunner {
         builder.description(this.bufferedReader.readLine());
 
         TeamComposition createdTeamComposition = teamCompositionService.saveTeamComposition(builder.build());
-        printResult(createdTeamComposition, "Team Composition");
+        printResult(createdTeamComposition, TEAM_COMPOSITION.name);
     }
 
     private void insertResult() throws IOException {
@@ -176,7 +180,7 @@ public class Clr implements CommandLineRunner {
         builder.players(playersSelection());
 
         Result createdResult = resultService.saveResult(builder.build());
-        printResult(createdResult, "Result");
+        printResult(createdResult, RECORD.name);
     }
 
     public <T extends BaseEntity> void displayTable(List<T> objects, String message) {
@@ -231,11 +235,11 @@ public class Clr implements CommandLineRunner {
                 while (true) {
                     input = bufferedReader.readLine();
 
-                    if (input.equalsIgnoreCase("more")) {
+                    if (MORE.value.equalsIgnoreCase(input)) {
                         break;
                     }
-                    if (input.equalsIgnoreCase("exit")) {
-                        throw new RuntimeException("Search aborted");
+                    if (EXIT.value.equalsIgnoreCase(input)) {
+                        throw new RuntimeException(SEARCH_ABORT);
                     }
                     try {
                         int index = Integer.parseInt(input);
@@ -243,7 +247,7 @@ public class Clr implements CommandLineRunner {
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid input. Please enter a valid index, 'more' to search further or 'exit' to abort.");
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Index out of range! Please enter a valid index.");
+                        System.out.println(INDEX_OUT_OF_BOUNDS);
                     }
                 }
             }
@@ -252,8 +256,8 @@ public class Clr implements CommandLineRunner {
         while (true) {
             input = bufferedReader.readLine();
 
-            if (input.equalsIgnoreCase("exit")) {
-                throw new RuntimeException("Search aborted");
+            if (EXIT.value.equalsIgnoreCase(input)) {
+                throw new RuntimeException(SEARCH_ABORT);
             }
             try {
                 int index = Integer.parseInt(input);
@@ -261,7 +265,7 @@ public class Clr implements CommandLineRunner {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid index, or 'exit' to abort.");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Index out of range! Please enter a valid index.");
+                System.out.println(INDEX_OUT_OF_BOUNDS);
             }
         }
     }
@@ -278,7 +282,11 @@ public class Clr implements CommandLineRunner {
     }
 
     private void exitApplication() {
-        System.out.println("Exiting the application...");
+        System.out.println(EXITING_APPLICATION);
         System.exit(0);
+    }
+
+    private String getPrintHeaderMessage(ObjectTypes type) {
+        return "%s list:".formatted(type.name);
     }
 }

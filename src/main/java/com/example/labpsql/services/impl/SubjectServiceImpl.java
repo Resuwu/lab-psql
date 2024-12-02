@@ -19,7 +19,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject saveSubject(AddSubjectRequest request) {
-        if (!validationUtil.isValid(request)) {
+        if (validationUtil.isNotValid(request)) {
             validationUtil
                     .violations(request)
                     .stream()

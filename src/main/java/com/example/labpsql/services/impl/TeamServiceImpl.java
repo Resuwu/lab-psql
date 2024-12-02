@@ -19,7 +19,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team saveTeam(AddTeamRequest request) {
-        if (!validationUtil.isValid(request)) {
+        if (validationUtil.isNotValid(request)) {
             validationUtil
                     .violations(request)
                     .stream()

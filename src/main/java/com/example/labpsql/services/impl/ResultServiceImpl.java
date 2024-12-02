@@ -20,7 +20,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Result saveResult(AddResultRequest request) {
-        if (!validationUtil.isValid(request)) {
+        if (validationUtil.isNotValid(request)) {
             validationUtil
                     .violations(request)
                     .stream()

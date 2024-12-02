@@ -12,8 +12,8 @@ import java.util.Set;
 public class ValidationUtil {
     private final Validator validator;
 
-    public <E> boolean isValid(E object) {
-        return this.validator.validate(object).isEmpty();
+    public <E> boolean isNotValid(E object) {
+        return !this.validator.validate(object).isEmpty();
     }
 
     public <E> Set<ConstraintViolation<E>> violations(E object) {

@@ -19,7 +19,7 @@ public class TeamCompositionServiceImpl implements TeamCompositionService {
 
     @Override
     public TeamComposition saveTeamComposition(AddTeamCompositionRequest request) {
-        if (!validationUtil.isValid(request)) {
+        if (validationUtil.isNotValid(request)) {
             validationUtil
                     .violations(request)
                     .stream()

@@ -21,4 +21,8 @@ public class ConsoleMessages {
             14. Exit
             """;
     public static final String INVALID_OPTION = "Invalid option. Please try again.";
+    public static final String WAITING_FOR_ENTER = "\nPress ENTER to continue...";
+    public static final String SEARCH_ABORT = "Search aborted";
+    public static final String INDEX_OUT_OF_BOUNDS = "Index out of range! Please enter a valid index.";
+    public static final String EXITING_APPLICATION = "Exiting the application...";
 }
