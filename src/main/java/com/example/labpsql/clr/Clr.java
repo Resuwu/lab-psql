@@ -227,6 +227,7 @@ public class Clr implements CommandLineRunner {
         while (iterator.hasNext()) {
             System.out.println(counter++ + ": " + iterator.next().toString());
             if (isSearchCountReached(counter)) {
+                System.out.println("Please enter an index, 'more' to search further or 'exit' to abort.");
                 while (true) {
                     input = bufferedReader.readLine();
 
@@ -267,7 +268,7 @@ public class Clr implements CommandLineRunner {
 
     private <T extends BaseEntity> void printResult(T object, String objectName) {
         if (object != null) {
-            System.out.println(object.toString());
+            System.out.println(object);
             System.out.println(objectName + " added successfully");
         }
     }
