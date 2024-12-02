@@ -26,7 +26,7 @@ public class Result extends BaseEntity {
 
     @Override
     public String toString() {
-        String string = String.format("""
+        return String.format("""
                         {
                             year=%s,
                             subject=%s,
@@ -37,9 +37,6 @@ public class Result extends BaseEntity {
                             players=%s
                         },
                         """,
-                year, subject, gender, result, location, recordType, players
-        );
-
-        return string;
+                year, subject, gender, result, location, recordType, players);
     }
 }
