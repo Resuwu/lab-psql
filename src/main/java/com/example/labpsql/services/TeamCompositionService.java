@@ -9,6 +9,4 @@ public interface TeamCompositionService {
     TeamComposition saveTeamComposition(AddTeamCompositionRequest request);
 
     List<TeamComposition> getAllTeamCompositions();
-
-    TeamComposition findById(String id);
 }

@@ -9,6 +9,4 @@ public interface PlayerService {
     Player savePlayer(AddPlayerRequest request);
 
     List<Player> getAllPlayers();
-
-    Player findByName(String name);
 }

@@ -3,6 +3,7 @@ package com.example.labpsql.utils;
 public class ConsoleMessages {
     public static final String WELCOME = "Welcome to the LabPsql application!";
     public static final String MENU = """
+            
             Please choose an option:
             1. Insert a new country
             2. Insert a new subject
@@ -13,10 +14,11 @@ public class ConsoleMessages {
             7. Display all countries
             8. Display all players
             9. Display all results
-            10. Display all subjects
-            11. Display all team compositions
-            12. Display all teams
-            13. Exit
+            10. Display results for a specific year
+            11. Display all subjects
+            12. Display all team compositions
+            13. Display all teams
+            14. Exit
             """;
     public static final String INVALID_OPTION = "Invalid option. Please try again.";
 }

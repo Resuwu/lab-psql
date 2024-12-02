@@ -9,6 +9,4 @@ public interface SubjectService {
     Subject saveSubject(AddSubjectRequest request);
 
     List<Subject> getAllSubjects();
-
-    List<Subject> findAllBySport(String sport);
 }

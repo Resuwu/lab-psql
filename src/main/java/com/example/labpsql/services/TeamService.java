@@ -9,6 +9,4 @@ public interface TeamService {
     Team saveTeam(AddTeamRequest request);
 
     List<Team> getAllTeams();
-
-    Team findByName(String name);
 }

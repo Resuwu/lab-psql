@@ -1,9 +1,11 @@
 package com.example.labpsql.services.impl;
 
+import com.example.labpsql.configs.ValidationUtil;
 import com.example.labpsql.dto.request.AddTeamCompositionRequest;
 import com.example.labpsql.models.TeamComposition;
 import com.example.labpsql.repositories.TeamCompositionRepository;
 import com.example.labpsql.services.TeamCompositionService;
+import jakarta.validation.ConstraintViolation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamCompositionServiceImpl implements TeamCompositionService {
     private final TeamCompositionRepository teamCompositionRepository;
+    private final ValidationUtil validationUtil;
 
     @Override
     public TeamComposition saveTeamComposition(AddTeamCompositionRequest request) {
+        if (!validationUtil.isValid(request)) {
+            validationUtil
+                    .violations(request)
+                    .stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+            return null;
+        }
         TeamComposition teamComposition = TeamComposition.builder()
                 .team(request.getTeam())
                 .year(request.getYear())
@@ -33,11 +44,5 @@ public class TeamCompositionServiceImpl implements TeamCompositionService {
             throw new RuntimeException("No team compositions found");
         }
         return teamCompositions;
-    }
-
-    @Override
-    public TeamComposition findById(String id) {
-        return teamCompositionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Team composition not found with id: " + id));
     }
 }

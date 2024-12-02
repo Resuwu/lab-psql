@@ -1,9 +1,12 @@
 package com.example.labpsql.services.impl;
 
+import com.example.labpsql.configs.ValidationUtil;
 import com.example.labpsql.dto.request.AddPlayerRequest;
 import com.example.labpsql.models.Player;
 import com.example.labpsql.repositories.PlayerRepository;
 import com.example.labpsql.services.PlayerService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
+    private final ValidationUtil validationUtil;
 
     @Override
     public Player savePlayer(AddPlayerRequest request) {
+        if (!validationUtil.isValid(request)) {
+            validationUtil
+                    .violations(request)
+                    .stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+            return null;
+        }
         Player player = new Player(
                 request.getName(),
                 request.getCountry(),
@@ -33,11 +45,5 @@ public class PlayerServiceImpl implements PlayerService {
             throw new RuntimeException("No players found");
         }
         return players;
-    }
-
-    @Override
-    public Player findByName(String name) {
-        return playerRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Player not found"));
     }
 }

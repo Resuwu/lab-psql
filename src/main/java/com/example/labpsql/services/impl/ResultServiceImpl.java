@@ -1,9 +1,11 @@
 package com.example.labpsql.services.impl;
 
+import com.example.labpsql.configs.ValidationUtil;
 import com.example.labpsql.dto.request.AddResultRequest;
 import com.example.labpsql.models.Result;
 import com.example.labpsql.repositories.ResultRepository;
 import com.example.labpsql.services.ResultService;
+import jakarta.validation.ConstraintViolation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResultServiceImpl implements ResultService {
     private final ResultRepository resultRepository;
+    private final ValidationUtil validationUtil;
 
     @Override
     public Result saveResult(AddResultRequest request) {
+        if (!validationUtil.isValid(request)) {
+            validationUtil
+                    .violations(request)
+                    .stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+            return null;
+        }
         Result result = Result.builder()
                 .year(request.getYear())
                 .subject(request.getSubject())

@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.example.labpsql.utils.ConsoleMessages.*;
+import static java.lang.System.exit;
 
 @Component
 @RequiredArgsConstructor
@@ -47,6 +48,14 @@ public class Clr implements CommandLineRunner {
                     case "4" -> insertTeam();
                     case "5" -> insertTeamComposition();
                     case "6" -> insertResult();
+                    case "7" -> displayTable(countryService.getAllCountries(), "Countries");
+                    case "8" -> displayTable(playerService.getAllPlayers(), "Players");
+                    case "9" -> displayTable(resultService.getAllResults(), "Results");
+                    case "10" -> displayResultsByYear();
+                    case "11" -> displayTable(subjectService.getAllSubjects(), "Subjects");
+                    case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), "Team Compositions");
+                    case "13" -> displayTable(teamService.getAllTeams(), "Teams");
+                    case "14" -> exit(0);
                     default -> System.out.println(INVALID_OPTION);
                 }
             } catch (IOException ioe) {
@@ -62,9 +71,7 @@ public class Clr implements CommandLineRunner {
         String countryName = this.bufferedReader.readLine();
 
         Country createdCountry = countryService.saveCountry(countryName);
-        System.out.println(createdCountry.toString());
-
-        System.out.println("Country added successfully");
+        printResult(createdCountry, "Countrie");
     }
 
     private void insertSubject() throws IOException {
@@ -76,9 +83,7 @@ public class Clr implements CommandLineRunner {
         builder.sport(this.bufferedReader.readLine());
 
         Subject createdSubject = subjectService.saveSubject(builder.build());
-        System.out.println(createdSubject.toString());
-
-        System.out.println("Subject added successfully\n");
+        printResult(createdSubject, "Subject");
     }
 
     private void insertPlayer() throws IOException {
@@ -99,9 +104,7 @@ public class Clr implements CommandLineRunner {
         builder.subject(search(subjectService.getAllSubjects()));
 
         Player createdPlayer = playerService.savePlayer(builder.build());
-        System.out.println(createdPlayer.toString());
-
-        System.out.println("Player created successfully\n");
+        printResult(createdPlayer, "Player");
     }
 
     private void insertTeam() throws IOException {
@@ -125,9 +128,7 @@ public class Clr implements CommandLineRunner {
         builder.managerName(this.bufferedReader.readLine());
 
         Team createdTeam = teamService.saveTeam(builder.build());
-        System.out.println(createdTeam.toString());
-
-        System.out.println("Team created successfully\n");
+        printResult(createdTeam, "Team");
     }
 
     private void insertTeamComposition() throws IOException {
@@ -145,9 +146,7 @@ public class Clr implements CommandLineRunner {
         builder.description(this.bufferedReader.readLine());
 
         TeamComposition createdTeamComposition = teamCompositionService.saveTeamComposition(builder.build());
-        System.out.println(createdTeamComposition.toString());
-
-        System.out.println("Team composition added successfully\n");
+        printResult(createdTeamComposition, "Team Composition");
     }
 
     private void insertResult() throws IOException {
@@ -174,9 +173,25 @@ public class Clr implements CommandLineRunner {
         builder.players(playersSelection());
 
         Result createdResult = resultService.saveResult(builder.build());
-        System.out.println(createdResult.toString());
+        printResult(createdResult, "Result");
+    }
 
-        System.out.println("Result added successfully\n");
+    public <T extends BaseEntity> void displayTable(List<T> objects, String objectName) {
+        System.out.println(objectName + ":");
+        for (T object : objects) {
+            System.out.println(object.toString());
+        }
+    }
+
+    public void displayResultsByYear() throws IOException {
+        System.out.println("Enter a year to search results:");
+        Year year = Year.parse(this.bufferedReader.readLine());
+
+        List<Result> resultsByYear = resultService.findAllByYear(year);
+        System.out.println("Results for year " + year + ":");
+        for (Result result : resultsByYear) {
+            System.out.println(result.toString());
+        }
     }
 
     private List<Player> playersSelection() throws IOException {
@@ -244,6 +259,13 @@ public class Clr implements CommandLineRunner {
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Index out of range! Please enter a valid index.");
             }
+        }
+    }
+
+    private <T extends BaseEntity> void printResult(T object, String objectName) {
+        if (object != null) {
+            System.out.println(object.toString());
+            System.out.println(objectName + " added successfully");
         }
     }
 

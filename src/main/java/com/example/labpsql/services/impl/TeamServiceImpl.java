@@ -1,9 +1,11 @@
 package com.example.labpsql.services.impl;
 
+import com.example.labpsql.configs.ValidationUtil;
 import com.example.labpsql.dto.request.AddTeamRequest;
 import com.example.labpsql.models.Team;
 import com.example.labpsql.repositories.TeamRepository;
 import com.example.labpsql.services.TeamService;
+import jakarta.validation.ConstraintViolation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
+    private final ValidationUtil validationUtil;
 
     @Override
     public Team saveTeam(AddTeamRequest request) {
+        if (!validationUtil.isValid(request)) {
+            validationUtil
+                    .violations(request)
+                    .stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+            return null;
+        }
         Team team = new Team(
                 request.getName(),
                 request.getCountry(),
@@ -34,11 +45,5 @@ public class TeamServiceImpl implements TeamService {
             throw new RuntimeException("No teams found");
         }
         return teams;
-    }
-
-    @Override
-    public Team findByName(String name) {
-        return teamRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Team not found"));
     }
 }
