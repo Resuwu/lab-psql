@@ -1,13 +1,9 @@
 package com.example.labpsql.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.Year;
 import java.util.List;
@@ -17,7 +13,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Result extends BaseEntity {
     private Year year;
     @ManyToOne
@@ -26,6 +21,25 @@ public class Result extends BaseEntity {
     private String result;
     private String location;
     private RecordType recordType;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Player> players;
+
+    @Override
+    public String toString() {
+        String string = String.format("""
+                        {
+                            year=%s,
+                            subject=%s,
+                            gender=%s,
+                            result='%s',
+                            location='%s',
+                            recordType=%s,
+                            players=%s
+                        },
+                        """,
+                year, subject, gender, result, location, recordType, players
+        );
+
+        return string;
+    }
 }

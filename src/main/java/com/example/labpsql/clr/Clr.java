@@ -55,7 +55,7 @@ public class Clr implements CommandLineRunner {
                     case "11" -> displayTable(subjectService.getAllSubjects(), "Subjects");
                     case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), "Team Compositions");
                     case "13" -> displayTable(teamService.getAllTeams(), "Teams");
-                    case "14" -> exit(0);
+                    case "14" -> exitApplication();
                     default -> System.out.println(INVALID_OPTION);
                 }
             } catch (IOException ioe) {
@@ -63,6 +63,9 @@ public class Clr implements CommandLineRunner {
             } catch (RuntimeException re) {
                 System.out.println("An error occurred: " + re.getMessage());
             }
+
+            System.out.print("\nPress ENTER to continue...");
+            bufferedReader.readLine();
         }
     }
 
@@ -271,5 +274,10 @@ public class Clr implements CommandLineRunner {
 
     private boolean isSearchCountReached(short counter) {
         return counter % SEARCH_COUNT == 0;
+    }
+
+    private void exitApplication() {
+        System.out.println("Exiting the application...");
+        System.exit(0);
     }
 }
