@@ -48,13 +48,13 @@ public class Clr implements CommandLineRunner {
                     case "4" -> insertTeam();
                     case "5" -> insertTeamComposition();
                     case "6" -> insertResult();
-                    case "7" -> displayTable(countryService.getAllCountries(), "Countries");
-                    case "8" -> displayTable(playerService.getAllPlayers(), "Players");
-                    case "9" -> displayTable(resultService.getAllResults(), "Results");
+                    case "7" -> displayTable(countryService.getAllCountries(), "Countries:");
+                    case "8" -> displayTable(playerService.getAllPlayers(), "Players:");
+                    case "9" -> displayTable(resultService.getAllResults(), "Results:");
                     case "10" -> displayResultsByYear();
-                    case "11" -> displayTable(subjectService.getAllSubjects(), "Subjects");
-                    case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), "Team Compositions");
-                    case "13" -> displayTable(teamService.getAllTeams(), "Teams");
+                    case "11" -> displayTable(subjectService.getAllSubjects(), "Subjects:");
+                    case "12" -> displayTable(teamCompositionService.getAllTeamCompositions(), "Team Compositions:");
+                    case "13" -> displayTable(teamService.getAllTeams(), "Teams:");
                     case "14" -> exitApplication();
                     default -> System.out.println(INVALID_OPTION);
                 }
@@ -74,7 +74,7 @@ public class Clr implements CommandLineRunner {
         String countryName = this.bufferedReader.readLine();
 
         Country createdCountry = countryService.saveCountry(countryName);
-        printResult(createdCountry, "Countrie");
+        printResult(createdCountry, "Country");
     }
 
     private void insertSubject() throws IOException {
@@ -179,8 +179,8 @@ public class Clr implements CommandLineRunner {
         printResult(createdResult, "Result");
     }
 
-    public <T extends BaseEntity> void displayTable(List<T> objects, String objectName) {
-        System.out.println(objectName + ":");
+    public <T extends BaseEntity> void displayTable(List<T> objects, String message) {
+        System.out.println(message);
         for (T object : objects) {
             System.out.println(object.toString());
         }
