@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Player extends BaseEntity {
     private String name;
     @ManyToOne

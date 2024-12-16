@@ -3,10 +3,7 @@ package com.example.labpsql.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.Year;
 
@@ -16,6 +13,7 @@ import java.time.Year;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Getter
 public class TeamComposition extends BaseEntity {
     @ManyToOne
     private Team team;

@@ -2,10 +2,7 @@ package com.example.labpsql.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "subjects")
@@ -13,6 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Getter
 public class Subject extends BaseEntity {
     private String name;
     private String sport;

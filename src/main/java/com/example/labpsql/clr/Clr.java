@@ -5,6 +5,7 @@ import com.example.labpsql.models.*;
 import com.example.labpsql.services.*;
 import com.example.labpsql.utils.ObjectTypes;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ import static com.example.labpsql.utils.SearchNavigation.MORE;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class Clr implements CommandLineRunner {
     private final CountryService countryService;
     private final PlayerService playerService;
@@ -63,9 +65,9 @@ public class Clr implements CommandLineRunner {
                     default -> System.out.println(INVALID_OPTION);
                 }
             } catch (IOException ioe) {
-                System.out.println("An error occurred while reading input: " + ioe.getMessage());
+                log.error("An error occurred while reading input: {}", ioe.getMessage());
             } catch (RuntimeException re) {
-                System.out.println("An error occurred: " + re.getMessage());
+                log.error("An error occurred: {}", re.getMessage());
             }
 
             System.out.print(WAITING_FOR_ENTER);

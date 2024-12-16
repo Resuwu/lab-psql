@@ -3,6 +3,7 @@ package com.example.labpsql.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Year;
@@ -13,6 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Result extends BaseEntity {
     private Year year;
     @ManyToOne

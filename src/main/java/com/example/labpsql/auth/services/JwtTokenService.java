@@ -1,4 +1,4 @@
-package com.example.labpsql.auth;
+package com.example.labpsql.auth.services;
 
 import com.example.labpsql.auth.models.User;
 import io.jsonwebtoken.Claims;
@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +62,7 @@ public class JwtTokenService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().decryptWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+        return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
     }
 
     private SecretKey getSigningKey() {
