@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+    </style>
+</head>
+<body>
+<h1>Register</h1>
+
+<form th:action="@{/auth/register}" th:object="${signUpRequest}" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" th:field="*{username}">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" th:field="*{password}">
+    <br>
+    <input type="submit" value="Register" class="button">
+</form>
+
+</body>
+</html>

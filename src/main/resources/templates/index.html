@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lab PSQL Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Lab PSQL Application</h1>
+
+    <div class="section">
+        <h2>Countries</h2>
+        <ul>
+            <li th:each="country : ${countries}" th:text="${country.name}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Players</h2>
+        <ul>
+            <li th:each="player : ${players}" th:text="${player.name}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Results</h2>
+        <ul>
+            <li th:each="result : ${results}" th:text="${result.result}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Subjects</h2>
+        <ul>
+            <li th:each="subject : ${subjects}" th:text="${subject.name}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Team Compositions</h2>
+        <ul>
+            <li th:each="teamComp : ${teamCompositions}" th:text="${teamComp.team.name + ' - ' + teamComp.player.name}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Teams</h2>
+        <ul>
+            <li th:each="team : ${teams}" th:text="${team.name}"></li>
+        </ul>
+    </div>
+</body>
+</html>
