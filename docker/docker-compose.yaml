@@ -1,0 +1,67 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest  # Use the latest PostgreSQL image
+    container_name: lab-psql
+    environment:
+      - POSTGRES_USER=postgres        # Set the PostgreSQL username
+      - POSTGRES_PASSWORD=postgres # Set the PostgreSQL password
+      - POSTGRES_DB=lab-psql      # Set the name of the database to be created
+    ports:
+      - "5432:5432"   # Expose PostgreSQL port 5432 to the host
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Persist PostgreSQL data in a named volume
+    restart: unless-stopped  # Restart policy to always keep PostgreSQL running
+
+  elasticsearch:
+    image: elasticsearch:7.16.1
+    volumes:
+      - ./configs/elasticsearch/config.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./docker_volumes/elasticsearch/data:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+      ELASTIC_USERNAME: "elastic"
+      ELASTIC_PASSWORD: "MyPw123"
+      discovery.type: single-node
+    networks:
+      - elk
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  logstash:
+    image: logstash:7.16.2
+    volumes:
+      - ./configs/logstash/config.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./configs/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./configs/logstash/pipelines:/usr/share/logstash/config/pipelines:ro
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+    ports:
+      - "5044:5044"
+      - "5000:5000"
+      - "9600:9600"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:7.16.1
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./configs/kibana/config.yml:/usr/share/kibana/config/kibana.yml:ro
+    networks:
+      - elk
+    ports:
+      - "5601:5601"
+
+volumes:
+  postgres-data:
+    driver: local  # Use local driver for data persistence
+
+
+networks:
+  elk:
+    driver: bridge

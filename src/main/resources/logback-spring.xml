@@ -1,0 +1,24 @@
+<configuration>
+    <appender name="LOGSTASH_TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5044</destination>  <!-- Replace with your Logstash server's IP -->
+        <reconnectionDelay>10000</reconnectionDelay>  <!-- Reconnect delay in ms -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <message>message</message>
+                <timestamp>@timestamp</timestamp>
+                <level>level</level>
+                <logger>logger</logger>
+                <thread>thread</thread>
+                <stackTrace>stack_trace</stackTrace>
+            </fieldNames>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOGSTASH_TCP" />
+    </root>
+
+    <logger name="org" level="INFO">
+        <appender-ref ref="LOGSTASH_TCP" />
+    </logger>
+</configuration>
